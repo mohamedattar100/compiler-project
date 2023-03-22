@@ -1,7 +1,7 @@
 grammar Compiler ;
 
 
-mainBlock : '{' block* '}';
+mainBlock : '{' block* '}'block*;
 
 block : '{'block*'}';
 
