@@ -11,5 +11,15 @@ public class listenerextend extends JavaParserBaseListener{
         this.rewriter = rewriter;
         this.counter=0;
     }
-    
+@Override public void enterBlock(JavaParser.BlockContext ctx) {
+
+        if(counter==1) {//in main
+            rewriter.insertAfter(ctx.getStart(),"\t"+"\t"+"File output = new File(\"output.txt\");"+"\n");
+            rewriter.insertAfter(ctx.getStart(),"\t"+"\t"+"output.createNewFile();"+"\n");
+            rewriter.insertAfter(ctx.getStart(),"\t"+"\t"+"FileWriter w = new FileWriter(\"output.txt\");"+"\n");
+            rewriter.insertAfter(ctx.getStart(),"\t"+"\t"+"w.write(\"block "+ this.counter + " is Visited \" +\"\\n\");"  +"\n");
+
+            rewriter.insertBefore(ctx.getStop(),"w.close();"+"\n");//the last }
+        }
+}
 }
