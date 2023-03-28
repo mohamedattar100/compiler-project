@@ -1,25 +1,26 @@
-import java.io.FileInputStream;
-import java.io.FileWriter;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
-    public class Test {
-        public static void main(String[] args) throws Exception {
-            String inputFile = "testin";
-            FileInputStream in = new FileInputStream(inputFile);
-            ANTLRInputStream input = new ANTLRInputStream(in);
-            CompilerLexer lexer = new CompilerLexer(input);
-            CommonTokenStream tokens = new CommonTokenStream(lexer);
-            CompilerParser parser = new CompilerParser(tokens);
-            ParseTree tree = parser.mainBlock(); // begin parsing at init rule
-           // System.out.println (tree.toStringTree (parser)); // print LISP-style tree
-            ParseTreeWalker parseTreeWalker = new ParseTreeWalker();
-            parseTreeWalker.walk(new listenerextend(), tree);
-            FileWriter fileWriter = new FileWriter("result.txt");
-          //  fileWriter.write("ddshfkjdh");
-            fileWriter.write(listenerextend.data);
-            fileWriter.close();
 
+import java.io.*;
 
+public class Test {
+    public static void main(String[] args) throws Exception {
+        int[] Array;
+        String inputFile = "input.java";
+        FileInputStream inputStream = new FileInputStream(inputFile);
+        ANTLRInputStream input = new ANTLRInputStream(inputStream);
+        JavaLexer lexer = new JavaLexer(input);
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        JavaParser parser = new JavaParser(tokens);
+        ParseTree tree = parser.compilationUnit();
+        ParseTreeWalker walker = new ParseTreeWalker();
+        TokenStreamRewriter rewriter = new TokenStreamRewriter(tokens);
+        walker.walk(new listenerextend(rewriter), tree);
 
-        }
+        File output = new File("output.java");
+        output.createNewFile();
+        FileWriter w = new FileWriter("output.java");
+        w.write(rewriter.getText());
+        w.close();
     }
+}
