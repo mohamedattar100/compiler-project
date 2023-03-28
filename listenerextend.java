@@ -1,45 +1,15 @@
-import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.TokenStreamRewriter;
+import org.antlr.v4.runtime.tree.TerminalNode;
 
-public class listenerextend extends CompilerBaseListener{
+import java.io.File;
+import java.io.FileWriter;
 
-    int x=0;
-    static String data="";
-
-    @Override
-    public void enterMainBlock(CompilerParser.MainBlockContext ctx) {
-        super.enterMainBlock(ctx);
-        System.out.println("{"+"// Block number "+x);
-        data+="{"+"// Block number "+x+"\n";
-        x++;
+public class listenerextend extends JavaParserBaseListener{
+    int counter;
+    TokenStreamRewriter rewriter;
+    public listenerextend(TokenStreamRewriter rewriter){
+        this.rewriter = rewriter;
+        this.counter=0;
     }
-
-    @Override
-    public void exitMainBlock(CompilerParser.MainBlockContext ctx) {
-        super.exitMainBlock(ctx);
-        System.out.println("   } ");
-        data+="} "+"\n";
-
-    }
-
-    @Override
-    public void enterBlock(CompilerParser.BlockContext ctx) {
-        super.enterBlock(ctx);
-        System.out.println("{"+"// Block number "+x);
-        data+="{"+"// Block number "+x+"\n";
-
-        x++;
-
-       // System.out.print("//block");
-    }
-
-    @Override
-    public void exitBlock(CompilerParser.BlockContext ctx) {
-        super.exitBlock(ctx);
-        System.out.println("   } ");
-        data+="} "+"\n";
-
-
-
-
-    }
+    
 }
