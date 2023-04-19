@@ -1,8 +1,7 @@
-import java.io.*;
 public class input {
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) {
         int x=5;
-        if(x==5) {
+        if(x==5||x==3) {
             System.out.println(x);
             for (int i = 0; i < x; i++) {
                     System.out.println(i);
