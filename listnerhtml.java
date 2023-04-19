@@ -53,3 +53,58 @@ public class listnerhtml extends JavaParserBaseListener{
         rewriter.insertAfter(ctx.getStop(),"</body>\n");
         rewriter.insertAfter(ctx.getStop(),"</html>\n");
     }
+ @Override
+    public void visitTerminal(TerminalNode node) {
+        if (node.getText().equals("||") || node.getText().equals("&&")) {
+            term = true;
+        }
+    }
+
+    @Override
+    public void enterParExpression(JavaParser.ParExpressionContext ctx) {
+        term = true;
+        endexpr = countexpr + 1;
+
+    }
+
+    @Override
+    public void exitParExpression(JavaParser.ParExpressionContext ctx) {
+        boolean reach = true;
+        boolean found = false;
+        for (int i = endexpr; i <= countexpr; i++) {
+
+            String str ="exp"+i+"is visited";
+            try {
+
+                File myObj = new File("the_visited_exp.txt");
+                Scanner myReader = new Scanner(myObj);
+                boolean current_exp = false;
+                while (myReader.hasNextLine()) {
+                    String data = myReader.nextLine();
+                    if (data.equals(str)) {
+                        current_exp = true;
+                    }
+                }
+                if (!current_exp) reach = false;
+                else found = true;
+                myReader.close();
+            } catch (FileNotFoundException e) {
+            }
+        }
+        if (!reach && found) {
+            rewriter.insertBefore(ctx.getStart(), "<span style=\"background-color:orange;\">");
+            rewriter.insertAfter(ctx.getStop(), "</span>");
+        }
+    }
+
+    @Override
+    public void enterExpression(JavaParser.ExpressionContext ctx) {
+        if (term && ctx.AND() == null && ctx.OR() == null) {
+            countexpr++;
+            term = false;
+        }
+    }
+
+
+
+}
